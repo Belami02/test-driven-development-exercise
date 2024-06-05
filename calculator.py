@@ -57,15 +57,24 @@ def add(s: str) -> str:
         >>>
     """
     
-    new = s.replace("\n", ",")
-    new = new.split(",")
+    if s.endswith(","):
+        return "Number expected but EOF found."
+    if ",\n" in s:
+        return f"Number expected but '\\n' found at position {s.find(',\n')}."
+    s = s.replace("\n", ",")
+    numbers = s.split(",")
     sum = 0
-    for i in new:
-        if i == "":
-            continue
-        if "." in i:
-            sum += float(i)
+    negatives = []
+    for num in numbers:
+        if num == "":
+            return "Number expected but ',' found."
+        if float(num) < 0:
+            negatives.append(num)
+        elif "." in num:
+            sum += float(num)
         else:
-            sum += int(i)
+            sum += int(num)
+    if negatives:   # if negatives is not empty
+        return f"Negative not allowed : {', '.join(negatives)}"
     return str(sum)
     
